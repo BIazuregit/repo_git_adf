@@ -1,0 +1,35 @@
+{
+	"name": "pipeline Demo ADF",
+	"properties": {
+		"activities": [
+			{
+				"name": "DF SCD",
+				"description": "",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "DF SCD Demo2",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2021-03-12T16:04:08Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

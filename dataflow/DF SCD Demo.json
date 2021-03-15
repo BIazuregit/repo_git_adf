@@ -1,0 +1,48 @@
+{
+	"name": "DF SCD Demo",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Excel_Sample_data",
+						"type": "DatasetReference"
+					},
+					"name": "ExcelSource"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTableDemoADF",
+						"type": "DatasetReference"
+					},
+					"name": "DBDestinationtbl"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTableDemoADF",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "SurrogateKey1"
+				},
+				{
+					"name": "Exists1"
+				},
+				{
+					"name": "Exists2"
+				},
+				{
+					"name": "Union1"
+				}
+			],
+			"script": "source(output(\n\t\tOrderDate as string,\n\t\tRegion as string,\n\t\tRep as string,\n\t\tItem as string,\n\t\tUnits as string,\n\t\tUnitCost as string,\n\t\tTotal as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> ExcelSource\nsource(output(\n\t\tOrderDate as string,\n\t\tRegion as string,\n\t\tRep as string,\n\t\tItem as string,\n\t\tUnits as string,\n\t\tUnitCost as string,\n\t\tTotal as string,\n\t\tkey as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> DBDestinationtbl\nExcelSource keyGenerate(output(key as long),\n\tstartAt: 1L) ~> SurrogateKey1\nSurrogateKey1, DBDestinationtbl exists(SurrogateKey1@key == DBDestinationtbl@key,\n\tnegate:true,\n\tbroadcast: 'auto')~> Exists1\nSurrogateKey1, DBDestinationtbl exists(SurrogateKey1@key == DBDestinationtbl@key,\n\tnegate:false,\n\tbroadcast: 'auto')~> Exists2\nExists2, Exists1 union(byName: true)~> Union1\nUnion1 sink(input(\n\t\tOrderDate as string,\n\t\tRegion as string,\n\t\tRep as string,\n\t\tItem as string,\n\t\tUnits as string,\n\t\tUnitCost as string,\n\t\tTotal as string,\n\t\tkey as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+		}
+	}
+}
