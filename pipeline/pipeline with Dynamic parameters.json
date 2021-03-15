@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Lookup the tables",
+				"name": "Lookup the tables ",
 				"description": "select * from demoADF.INFORMATION_SCHEMA.tables where table_type = 'BASE TABLE'",
 				"type": "Lookup",
 				"dependsOn": [],
@@ -34,7 +34,7 @@
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Lookup the tables",
+						"activity": "Lookup the tables ",
 						"dependencyConditions": [
 							"Succeeded"
 						]
