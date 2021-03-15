@@ -1,0 +1,61 @@
+{
+	"name": "DF SCD Demo2",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Excel_Sample_data",
+						"type": "DatasetReference"
+					},
+					"name": "ExcelSource"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTableDemoADF",
+						"type": "DatasetReference"
+					},
+					"name": "DBDestinationtbl"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTableDemoADF",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTableDemoADF",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				}
+			],
+			"transformations": [
+				{
+					"name": "LookupPK"
+				},
+				{
+					"name": "isMatching"
+				},
+				{
+					"name": "ConditionalSplit1"
+				},
+				{
+					"name": "AlterRow1"
+				},
+				{
+					"name": "AlterRow2"
+				},
+				{
+					"name": "hashcolumn"
+				}
+			],
+			"script": "source(output(\n\t\tOrderDate as string,\n\t\tRegion as string,\n\t\tRep as string,\n\t\tItem as string,\n\t\tUnits as string,\n\t\tUnitCost as string,\n\t\tTotal as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> ExcelSource\nsource(output(\n\t\tOrderDate as string,\n\t\tRegion as string,\n\t\tRep as string,\n\t\tItem as string,\n\t\tUnits as string,\n\t\tUnitCost as string,\n\t\tTotal as string,\n\t\tkey as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> DBDestinationtbl\nExcelSource, DBDestinationtbl lookup(ExcelSource@OrderDate == DBDestinationtbl@OrderDate,\n\tmultiple: true,\n\tbroadcast: 'auto')~> LookupPK\nLookupPK derive(match = isMatch()) ~> isMatching\nisMatching split(match,\n\tdisjoint: false) ~> ConditionalSplit1@(IsMacth, noMatch)\nConditionalSplit1@IsMacth alterRow(updateIf(true())) ~> AlterRow1\nConditionalSplit1@noMatch alterRow(insertIf(true())) ~> AlterRow2\nAlterRow2 derive(key = md5(ConditionalSplit1@noMatch@OrderDate)) ~> hashcolumn\nAlterRow1 sink(input(\n\t\tOrderDate as string,\n\t\tRegion as string,\n\t\tRep as string,\n\t\tItem as string,\n\t\tUnits as string,\n\t\tUnitCost as string,\n\t\tTotal as string,\n\t\tkey as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:false,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['OrderDate'],\n\tformat: 'table',\n\tmapColumn(\n\t\tRegion = ConditionalSplit1@IsMacth@Region,\n\t\tRep = ConditionalSplit1@IsMacth@Rep,\n\t\tItem = ConditionalSplit1@IsMacth@Item,\n\t\tUnits = ConditionalSplit1@IsMacth@Units,\n\t\tUnitCost = ConditionalSplit1@IsMacth@UnitCost,\n\t\tTotal = ConditionalSplit1@IsMacth@Total,\n\t\tkey,\n\t\tOrderDate = ConditionalSplit1@IsMacth@OrderDate\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1\nhashcolumn sink(input(\n\t\tOrderDate as string,\n\t\tRegion as string,\n\t\tRep as string,\n\t\tItem as string,\n\t\tUnits as string,\n\t\tUnitCost as string,\n\t\tTotal as string,\n\t\tkey as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink2"
+		}
+	}
+}
