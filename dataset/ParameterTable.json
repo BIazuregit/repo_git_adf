@@ -11,6 +11,9 @@
 				"defaultValue": "DimProducts"
 			}
 		},
+		"folder": {
+			"name": "Azure SQL Server Datasets"
+		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [],
