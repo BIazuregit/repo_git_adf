@@ -1,5 +1,5 @@
 {
-	"name": "test insert cond rows",
+	"name": "pipeline test insert cond rows",
 	"properties": {
 		"activities": [
 			{
