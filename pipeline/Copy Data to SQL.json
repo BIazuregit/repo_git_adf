@@ -32,6 +32,174 @@
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Make",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "make",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "mpg",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "mpg",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 1,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "cyl",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "cyl",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "disp",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "disp",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 1,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "hp",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "hp",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "drat",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "drat",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 2,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "wt",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "wt",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 2,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "qsec",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "qsec",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 2,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "vs",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "vs",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "am",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "am",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "gear",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "gear",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "carb",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "carb",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							}
+						],
 						"typeConversion": true,
 						"typeConversionSettings": {
 							"allowDataTruncation": true,
