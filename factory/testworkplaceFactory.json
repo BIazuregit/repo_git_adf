@@ -1,4 +1,12 @@
 {
 	"name": "testworkplaceFactory",
+	"properties": {
+		"globalParameters": {
+			"table_name_global": {
+				"type": "string",
+				"value": "test"
+			}
+		}
+	},
 	"location": "northeurope"
 }
